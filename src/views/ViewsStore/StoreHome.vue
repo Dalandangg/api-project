@@ -1,9 +1,14 @@
 <template>
   <el-container class="h-screen">
     <!-- Sidebar Navigation -->
-    <el-aside width="220px" class="bg-gray-100">
+    <el-aside width="220px">
       <div>Store Admin</div>
-      <el-menu :default-active="activeMenu" @select="handleMenuSelect" router>
+      <el-menu
+        style="height: 1000px"
+        :default-active="activeMenu"
+        @select="handleMenuSelect"
+        router
+      >
         <el-menu-item index="/store/dashboard">
           <el-icon><Monitor /></el-icon>
           <span>Dashboard</span>
@@ -28,7 +33,7 @@
       <el-header>
         {{ pageTitle }}
       </el-header>
-      <el-main> asdas </el-main>
+      <el-main> <router-view /></el-main>
     </el-container>
   </el-container>
 </template>

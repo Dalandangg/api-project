@@ -19,11 +19,11 @@ const router = createRouter({
         },
         {
           path: 'users',
-          component: () => import('@/components/ComponentsStore/StoreDashboard.vue'),
+          component: () => import('@/components/ComponentsStore/UserManagement.vue'),
         },
         {
           path: 'products',
-          component: () => import('@/components/ComponentsStore/StoreDashboard.vue'),
+          component: () => import('@/components/ComponentsStore/ProductManagement.vue'),
         },
       ],
     },
