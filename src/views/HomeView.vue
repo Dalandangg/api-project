@@ -1,5 +1,5 @@
 <template>
-  <div style="max-width: 500px; margin: auto; padding: 2rem;">
+  <div style="max-width: 500px; margin: auto; padding: 2rem">
     <component :is="showLogin ? LoginForm : RegisterForm" />
     <el-divider />
     <el-button @click="toggleForm" type="text">
@@ -23,13 +23,26 @@ const router = useRouter()
 watch(
   () => auth.user,
   (user) => {
-    if (user) router.push('/landing')
-  }
+    if (user) {
+      if (user.type === 'store-owner') {
+        router.push('/store')
+      } else {
+        router.push('/landing')
+      }
+    }
+  },
 )
 
 // Also check on mount (in case user is already logged in)
 onMounted(() => {
-  if (auth.user) router.push('/landing')
+  console.log('MOUNTED user:', auth.user)
+  if (auth.user) {
+    if (auth.user.type === 'store-owner') {
+      router.push('/store')
+    } else {
+      router.push('/landing')
+    }
+  }
 })
 
 function toggleForm() {
