@@ -1,13 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import vueTest from '@/views/vueTest.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: vueTest,
+      path: '/store',
+      component: () => import('@/views/ViewsStore/StoreHome.vue'),
+      meta: { required: true, role: 'store' },
+      children: [
+        {
+          path: 'dashboard',
+          component: () => import('@/components/ComponentsStore/StoreDashboard.vue'),
+        },
+        {
+          path: 'users',
+          component: () => import('@/components/ComponentsStore/StoreDashboard.vue'),
+        },
+        {
+          path: 'products',
+          component: () => import('@/components/ComponentsStore/StoreDashboard.vue'),
+        },
+      ],
     },
   ],
 })
