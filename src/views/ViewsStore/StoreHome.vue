@@ -1,14 +1,15 @@
+StoreHome.vue
 <template>
-  <el-container class="h-screen">
+  <el-container>
     <!-- Sidebar Navigation -->
-    <el-aside width="220px">
-      <div>Store Admin</div>
-      <el-menu
-        style="height: 1000px"
-        :default-active="activeMenu"
-        @select="handleMenuSelect"
-        router
-      >
+    <el-aside width="200px">
+      <div class="nav-header">
+        <el-icon size="20">
+          <UserFilled />
+        </el-icon>
+        API Store
+      </div>
+      <el-menu style="height: 100vh" :default-active="activeMenu" @select="handleMenuSelect" router>
         <el-menu-item index="/store/dashboard">
           <el-icon><Monitor /></el-icon>
           <span>Dashboard</span>
@@ -30,7 +31,7 @@
 
     <!-- Main Content Area -->
     <el-container>
-      <el-header>
+      <el-header style="font-size: 24px; line-height: 55px; text-align: center">
         {{ pageTitle }}
       </el-header>
       <el-main> <router-view /></el-main>
@@ -42,7 +43,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/StoreCustomer/auth.ts'
-import { Monitor, User, Goods, SwitchButton } from '@element-plus/icons-vue'
+import { Monitor, User, Goods, SwitchButton, UserFilled } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -79,5 +80,11 @@ function logout() {
 }
 .el-main {
   background-color: white;
+}
+.nav-header {
+  height: 60px;
+  text-align: center;
+  font-size: 24px;
+  line-height: 55px;
 }
 </style>
