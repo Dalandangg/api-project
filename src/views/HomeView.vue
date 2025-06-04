@@ -25,7 +25,7 @@ watch(
   (user) => {
     if (user) {
       if (user.type === 'store-owner') {
-        router.push('/store')
+        router.push('/store/users')
       } else {
         router.push('/landing')
       }
@@ -38,7 +38,7 @@ onMounted(() => {
   console.log('MOUNTED user:', auth.user)
   if (auth.user) {
     if (auth.user.type === 'store-owner') {
-      router.push('/store')
+      router.push('/store/users')
     } else {
       router.push('/landing')
     }

@@ -2,18 +2,14 @@ StoreHome.vue
 <template>
   <el-container>
     <!-- Sidebar Navigation -->
-    <el-aside style="width: 200px">
+    <el-aside style="width: 200px; color: white">
       <div class="nav-header">
-        <el-icon size="20">
+        <el-icon size="14">
           <UserFilled />
         </el-icon>
-        API Store
+        Store Dashboard
       </div>
       <el-menu style="height: 100vh" :default-active="activeMenu" @select="handleMenuSelect" router>
-        <el-menu-item index="/store/dashboard">
-          <el-icon><Monitor /></el-icon>
-          <span>Dashboard</span>
-        </el-menu-item>
         <el-menu-item index="/store/users">
           <el-icon><User /></el-icon>
           <span>Manage Users</span>
@@ -31,10 +27,18 @@ StoreHome.vue
 
     <!-- Main Content Area -->
     <el-container>
-      <el-header style="font-size: 24px; line-height: 55px; text-align: center">
+      <el-header
+        style="
+          font-size: 24px;
+          line-height: 55px;
+          text-align: center;
+          background-color: black;
+          color: white;
+        "
+      >
         {{ pageTitle }}
       </el-header>
-      <el-main> <router-view /></el-main>
+      <el-main><router-view /></el-main>
     </el-container>
   </el-container>
 </template>
@@ -43,7 +47,7 @@ StoreHome.vue
 import { ref, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/StoreCustomer/auth.ts'
-import { Monitor, User, Goods, SwitchButton, UserFilled } from '@element-plus/icons-vue'
+import { User, Goods, SwitchButton, UserFilled } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -75,6 +79,10 @@ function logout() {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  min-height: 100vh;
+}
 .el-aside {
   border-right: 1px solid #ebeef5;
 }
@@ -84,7 +92,8 @@ function logout() {
 .nav-header {
   height: 60px;
   text-align: center;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 55px;
+  background-color: black;
 }
 </style>

@@ -18,7 +18,7 @@ export function useStoreProducts() {
   async function fetchProducts() {
     loading.value = true
     try {
-      const res = await axios.get('https://fakestoreapi.com/products')
+      const res = await axios.get('https://fakestoreapi.com/products?limit=13')
       products.value = res.data
     } catch (err) {
       console.error('Failed to fetch products', err)

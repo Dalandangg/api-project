@@ -2,7 +2,7 @@
   <div>
     <el-button type="primary" @click="showForm = true">Add Product</el-button>
 
-    <el-table :data="products" style="width: 100%">
+    <el-table :data="products" stripe>
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="title" label="Title" />
       <el-table-column prop="price" label="Price" />
@@ -94,6 +94,6 @@ img {
   width: 60px;
   height: 60px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 </style>
