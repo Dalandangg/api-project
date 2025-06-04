@@ -2,7 +2,7 @@ StoreHome.vue
 <template>
   <el-container>
     <!-- Sidebar Navigation -->
-    <el-aside width="200px">
+    <el-aside style="width: 200px">
       <div class="nav-header">
         <el-icon size="20">
           <UserFilled />
