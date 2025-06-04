@@ -1,0 +1,1 @@
+<template>Store Dashboard</template>

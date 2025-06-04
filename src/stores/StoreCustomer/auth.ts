@@ -41,10 +41,10 @@ export const useAuthStore = defineStore('auth', {
       }
       const users = loadUsers()
       const found = users.find(
-        (u: any) => u.email === email && u.password === password && u.type === type
+        (u: any) => u.email === email && u.password === password && u.type === type,
       )
       if (found) {
-        this.user = { email }
+        this.user = { email: found.email, type: found.type }
         this.userType = type
         saveCurrentUser(this.user, this.userType)
       } else {
