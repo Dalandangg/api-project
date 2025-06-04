@@ -2,27 +2,23 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/StoreCustomer/auth.ts'
+import { useCartStore } from '@/stores/cart'
 import { useRouter } from 'vue-router'
+import { ElMessageBox, ElMessage } from 'element-plus'  // Add this import
 
 const auth = useAuthStore()
+const cart = useCartStore()
 const router = useRouter()
 const products = ref([])
-const selectedProduct = ref(null)
-const dialogVisible = ref(false)
+const cartDrawer = ref(false)
 
 function logout() {
   auth.logout()
   router.push('/home')
 }
 
-async function showProductDetails(id: number) {
-  try {
-    const response = await axios.get(`https://fakestoreapi.com/products/${id}`)
-    selectedProduct.value = response.data
-    dialogVisible.value = true
-  } catch (error) {
-    alert('Failed to load product details.')
-  }
+function goToProducts() {
+  router.push('/products')
 }
 
 onMounted(async () => {
@@ -33,37 +29,86 @@ onMounted(async () => {
     alert('Failed to load products.')
   }
 })
+
+const confirmLogout = () => {
+  ElMessageBox.confirm(
+    'Are you sure you want to logout?',
+    'Confirm Logout',
+    {
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      auth.logout()
+      router.push('/home')
+      ElMessage.success('Successfully logged out')
+    })
+    .catch(() => {
+      // User canceled
+    })
+}
 </script>
 
 <template>
-  <div>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <h2>All Products</h2>
-      <el-button type="danger" @click="logout">Logout</el-button>
-    </div>
-    <el-row :gutter="20">
-      <el-col :span="6" v-for="product in products" :key="product.id">
-        <el-card
-          :body-style="{ padding: '20px' }"
-          style="margin-bottom: 20px; cursor: pointer;"
-          @click="showProductDetails(product.id)"
-        >
-          <img :src="product.image" alt="product image" style="width: 100px; height: 100px; object-fit: contain; display: block; margin: 0 auto 10px;" />
-          <h3 style="font-size: 1.1rem; margin-bottom: 8px;">{{ product.title }}</h3>
-          <p style="font-size: 0.9rem; color: #888;">{{ product.category }}</p>
-          <p style="font-weight: bold;">${{ product.price }}</p>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <el-dialog v-model="dialogVisible" title="Product Details" width="400px" :before-close="() => dialogVisible = false">
-      <div v-if="selectedProduct">
-        <img :src="selectedProduct.image" alt="product image" style="width: 120px; height: 120px; object-fit: contain; display: block; margin: 0 auto 10px;" />
-        <h3>{{ selectedProduct.title }}</h3>
-        <p><strong>Category:</strong> {{ selectedProduct.category }}</p>
-        <p><strong>Price:</strong> ${{ selectedProduct.price }}</p>
-        <p><strong>Description:</strong> {{ selectedProduct.description }}</p>
+  <div style="max-width: 1200px; margin: 32px auto 0 auto; padding: 0 16px;">
+    <div
+      style="position: sticky; top: 0; z-index: 2000; background: #fff; display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; margin-bottom: 0; padding-top: 8px;"
+    >
+      <el-button type="primary" @click="goToProducts">View Products</el-button>
+      <div>
+        <el-button icon="el-icon-shopping-cart-full" @click="cartDrawer = true" style="margin-right: 8px;">
+          Cart <span v-if="cart.items.length">({{ cart.items.length }})</span>
+        </el-button>
+        <el-button type="danger" @click="confirmLogout">Logout</el-button>
       </div>
-    </el-dialog>
+    </div>
+    <h2 style="text-align: center; margin-bottom: 24px;">
+      Welcome<span v-if="auth.user && auth.user.email">, {{ auth.user.email }}</span>!
+    </h2>
+    <el-carousel height="80vh" indicator-position="outside" arrow="always">
+      <el-carousel-item v-for="product in products" :key="product.id">
+        <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+          <el-card style="width: 60vw; min-width: 350px; max-width: 900px; height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 100%; text-align: center;">
+              <img
+                :src="product.image"
+                alt="product image"
+                style="width: 300px; height: 300px; object-fit: contain; margin-bottom: 32px; display: block; margin-left: auto; margin-right: auto;"
+              />
+              <h2 style="font-size: 2rem;">{{ product.title }}</h2>
+              <p style="font-weight: bold; font-size: 1.5rem;">${{ product.price }}</p>
+              <p style="margin-top: 16px; color: #888;">{{ product.category }}</p>
+              <p style="margin-top: 16px; max-width: 600px; margin-left: auto; margin-right: auto;">{{ product.description }}</p>
+            </div>
+          </el-card>
+        </div>
+      </el-carousel-item>
+    </el-carousel>
+    <!-- Cart Drawer -->
+    <el-drawer v-model="cartDrawer" title="Cart" direction="rtl" size="30%">
+      <div v-if="cart.items.length">
+        <div v-for="item in cart.items" :key="item.id" style="display: flex; align-items: center; margin-bottom: 16px;">
+          <img :src="item.image" style="width: 60px; height: 60px; object-fit: contain; margin-right: 12px;" />
+          <div style="flex: 1;">
+            <div>{{ item.title }}</div>
+            <div style="font-weight: bold;">${{ item.price }}</div>
+            <div>
+              <el-button size="small" @click="cart.decrement(item.id)">-</el-button>
+              <span style="margin: 0 8px;">{{ item.quantity }}</span>
+              <el-button size="small" @click="cart.increment(item.id)">+</el-button>
+              <el-button size="small" type="danger" @click="confirmRemoveFromCart(item.id)">Delete</el-button>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: right; font-weight: bold; margin-top: 16px;">
+          Total: ${{ cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2) }}
+        </div>
+      </div>
+      <div v-else>
+        <p>Your cart is empty.</p>
+      </div>
+    </el-drawer>
   </div>
 </template>
