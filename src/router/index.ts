@@ -16,10 +16,6 @@ const router = createRouter({
       meta: { required: true, role: 'store' },
       children: [
         {
-          path: 'dashboard',
-          component: () => import('@/components/ComponentsStore/StoreDashboard.vue'),
-        },
-        {
           path: 'users',
           component: () => import('@/components/ComponentsStore/UserManagement.vue'),
         },

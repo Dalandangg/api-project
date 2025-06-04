@@ -1,13 +1,17 @@
+UserManagement.vue
 <template>
   <div>
-    <h2>All Users</h2>
+    <div class="header">
+      <h2>All Users</h2>
+    </div>
+
     <el-table :data="allUsers" stripe style="width: 100%">
       <el-table-column label="Name">
         <template #default="{ row }"> {{ row.name.firstname }} {{ row.name.lastname }} </template>
       </el-table-column>
       <el-table-column label="Username" prop="username" />
       <el-table-column label="Email" prop="email" />
-      <el-table-column prop="password" label="Password" />
+      <el-table-column label="Password" prop="password" />
       <el-table-column label="Actions">
         <template #default="{ row }">
           <el-button
@@ -22,7 +26,10 @@
       </el-table-column>
     </el-table>
 
-    <h2>Store Users</h2>
+    <div class="header">
+      <h2>Store Users</h2>
+    </div>
+
     <el-table :data="storeUsers" stripe style="width: 100%">
       <el-table-column label="Name">
         <template #default="{ row }"> {{ row.name.firstname }} {{ row.name.lastname }} </template>
@@ -44,7 +51,7 @@
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import { useStoreAdmin } from '@/composables/ComposablesStore/useStoreAdmin'
+import { useStoreAdmin } from '@/composables/ComposablesStore/useStoreUsers'
 
 const { allUsers, storeUsers, fetchAllUsers, addUserToStore, removeUserFromStore } = useStoreAdmin()
 
@@ -52,3 +59,9 @@ onMounted(() => {
   fetchAllUsers()
 })
 </script>
+
+<style lang="css" scoped>
+.header {
+  color: black;
+}
+</style>
