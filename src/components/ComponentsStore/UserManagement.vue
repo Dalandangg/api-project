@@ -51,7 +51,7 @@ UserManagement.vue
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-import { useStoreAdmin } from '@/composables/ComposablesStore/useStoreAdmin'
+import { useStoreAdmin } from '@/composables/ComposablesStore/useStoreUsers'
 
 const { allUsers, storeUsers, fetchAllUsers, addUserToStore, removeUserFromStore } = useStoreAdmin()
 
